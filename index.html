@@ -29,7 +29,6 @@
     *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
     html,body{height:100%}
 
-    /* ✅ スマホでムラになりにくい背景 */
     body{
       margin:0;
       font-family:Inter,'Noto Sans JP',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial,sans-serif;
@@ -48,14 +47,12 @@
       z-index:-1;
     }
 
-    /* ✅ スマホ中心：左右余白は小さめ */
     .wrap{
       max-width:620px;
       margin:0 auto;
-      padding:12px 12px calc(120px + var(--safe));
+      padding:12px 12px calc(110px + var(--safe));
     }
 
-    /* ✅ ヘッダー（小さく・邪魔しない） */
     header{
       position:sticky; top:0; z-index:10;
       background:rgba(255,255,255,.94);
@@ -105,7 +102,6 @@
       white-space:nowrap;
     }
 
-    /* ✅ ファーストビュー：短く */
     .hero{
       margin-top:12px;
       border:1px solid var(--line);
@@ -127,7 +123,6 @@
     h1{margin:0 0 6px; font-size:20px; letter-spacing:.01em}
     .lead{margin:0; color:rgba(255,255,255,.86); line-height:1.7; font-size:13px}
 
-    /* ✅ カード */
     .card{
       margin-top:12px;
       background:var(--panel);
@@ -168,10 +163,8 @@
     }
     .hint{margin:8px 0 0; color:var(--muted); font-size:12.5px; line-height:1.6}
 
-    /* ✅ スマホは常に1列（タップしやすい） */
     .grid{display:grid; gap:10px; grid-template-columns:1fr}
 
-    /* ✅ 選択肢：大きめ */
     .choice{
       display:flex; gap:12px; align-items:flex-start;
       padding:14px 14px;
@@ -226,7 +219,6 @@
       box-shadow:0 0 0 4px rgba(44,107,220,.12);
     }
 
-    /* ✅ スマホ用：星は折り返してOK */
     .stars{
       display:flex;
       gap:8px;
@@ -262,72 +254,6 @@
     }
     .star.isOn span{color:#f59e0b; transform:scale(1.05)}
 
-    /* ✅ 下固定バー：スマホは“確認ボタン”を主役に */
-    .stickyBar{
-      position:fixed; left:0; right:0; bottom:0; z-index:20;
-      background:rgba(255,255,255,.96);
-      border-top:1px solid var(--line);
-      box-shadow:0 -10px 26px rgba(11,18,32,.08);
-      padding:10px 12px calc(10px + var(--safe));
-      backdrop-filter:saturate(140%) blur(8px);
-    }
-    .stickyInner{
-      max-width:620px; margin:0 auto;
-      display:flex; flex-direction:column; gap:8px;
-    }
-    .status{font-size:12.5px; color:var(--muted)}
-    .btnRow{display:flex; gap:10px}
-    .btn{
-      min-height:50px;
-      padding:12px 16px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background:#fff;
-      font-weight:900;
-      cursor:pointer;
-      flex:1;
-      font-size:14px;
-    }
-    .btn.primary{
-      border-color:transparent;
-      background:linear-gradient(180deg, var(--brand-2), var(--brand));
-      color:#fff;
-      box-shadow:0 14px 20px rgba(15,43,91,.16);
-    }
-    .btn[disabled]{opacity:.55; cursor:not-allowed}
-
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:96px;
-      transform:translateX(-50%);
-      background:rgba(15,43,91,.92);
-      color:#fff;
-      font-weight:800;
-      font-size:13px;
-      padding:10px 12px;
-      border-radius:999px;
-      display:none;
-      z-index:30;
-      box-shadow:0 14px 26px rgba(11,18,32,.25);
-    }
-
-    .result{display:none; margin-top:12px}
-    .summary{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      background:#fff;
-    }
-    .summary h3{margin:0 0 8px; font-size:15px}
-    .row{padding:10px 0; border-top:1px dashed #e2e8f0}
-    .row:first-of-type{border-top:none}
-    .k{font-weight:900; font-size:12.5px}
-    .v{margin-top:6px; color:var(--ink); font-size:13.5px; line-height:1.6}
-
-    .actions{display:flex; gap:10px; flex-direction:column; margin-top:12px}
-    .actions .btn{width:100%}
-
     .err{
       display:none;
       margin-top:10px;
@@ -340,10 +266,116 @@
       font-weight:800;
       line-height:1.6;
     }
+
+    /* ===== 送付UI（提示いただいた形） ===== */
+
+    /* 右端の細いナビ（固定） */
+    .side-nav{
+      position:fixed;
+      right:-5px;
+      top:80%;
+      transform:translateY(-50%) translateX(15px);
+      background:#13ca5e;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:4px;
+      border-radius:10px 0 0 10px;
+      z-index:1000;
+      width:35px;
+    }
+    .side-nav a{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      text-decoration:none;
+      font-size:10px;
+      margin:5px 0;
+      padding:5px;
+      transition:background .3s, transform .2s;
+      border-radius:5px;
+      width:30px;
+      height:30px;
+      text-align:center;
+      position:relative;
+    }
+    .side-nav a:active{transform:scale(1)}
+    .side-nav a span{
+      font-size:24px;
+      position:absolute;
+      left:-0px;
+      top:13px;
+    }
+    @media (max-width:600px){
+      .side-nav{right:2px; width:30px}
+      .side-nav a{width:28px; height:28px}
+    }
+
+    /* 下部の送信バー（固定） */
+    .sendBar{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      z-index:999;
+      background:rgba(255,255,255,.96);
+      border-top:1px solid var(--line);
+      box-shadow:0 -10px 26px rgba(11,18,32,.08);
+      padding:10px 12px calc(10px + var(--safe));
+      backdrop-filter:saturate(140%) blur(8px);
+    }
+    .sendBarInner{
+      max-width:620px;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .status{
+      font-size:12.5px;
+      color:var(--muted);
+    }
+    .sendRow{
+      display:flex;
+      gap:10px;
+    }
+    .miniBtn{
+      min-height:50px;
+      padding:12px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:900;
+      cursor:pointer;
+      flex:0 0 auto;
+      width:88px;
+    }
+    .submit-button{
+      width:100%;
+      min-height:50px;
+      padding:14px;
+      border:none;
+      border-radius:999px;
+      background-color:#dc3545;
+      color:#fff;
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 14px 20px rgba(220,53,69,.16);
+    }
+    .submit-button:active{transform:translateY(1px)}
+    .submit-button:disabled{opacity:.55; cursor:not-allowed}
   </style>
 </head>
 
 <body>
+  <!-- 右側の追従ナビ（送信へジャンプ） -->
+  <div class="side-nav" id="sideNav">
+    <a href="#section-message" aria-label="送信へ">
+      <span>⇩</span>
+    </a>
+  </div>
+
   <header>
     <div class="headbar">
       <div class="brand">
@@ -365,7 +397,7 @@
         <h1>ご来院アンケート</h1>
         <p class="lead">
           サービス向上のため、簡単なアンケートにご協力ください。<br>
-          <b>必須</b>の項目は未回答だと確認できません。
+          <b>必須</b>の項目は未回答だと送信できません。
         </p>
       </div>
     </section>
@@ -538,47 +570,65 @@
 
       <div class="err" id="errorBox" role="alert" aria-live="polite"></div>
 
-      <section class="card result" id="resultView">
-        <div class="summary" id="summaryBox"></div>
-        <p class="hint">※このページ単体では保存送信は行いません。必要に応じてコピー・LINE共有をご利用ください。</p>
-        <div class="actions">
-          <button type="button" class="btn" id="btnRestart">やり直す</button>
-          <button type="button" class="btn" id="btnCopy">回答をコピー</button>
-          <button type="button" class="btn primary" id="btnShareLine">LINEで送る</button>
+      <!-- 送信のアンカー（右ナビの行き先） -->
+      <div id="section-message" style="height:1px;"></div>
+
+      <!-- ページ下にも送信ボタン（固定バーと同じ動作） -->
+      <section class="card">
+        <div class="secTitle">
+          <h2>送信</h2>
+          <span class="badge req">必須確認</span>
         </div>
+        <p class="hint">入力内容を確認し、問題なければ送信してください。</p>
+        <button class="submit-button" type="button" id="btnSubmitInline">アンケート内容を送信</button>
       </section>
 
     </form>
   </main>
 
-  <div class="stickyBar" id="stickyBar">
-    <div class="stickyInner">
+  <!-- 下部固定の送信バー（提示サンプルに合わせる） -->
+  <div class="sendBar" id="sendBar">
+    <div class="sendBarInner">
       <div class="status" id="statusText">必須項目の入力状況を確認しています…</div>
-      <div class="btnRow">
-        <button type="button" class="btn" id="btnTop">上へ</button>
-        <button type="button" class="btn primary" id="btnSubmit">内容を確認</button>
+      <div class="sendRow">
+        <button type="button" class="miniBtn" id="btnTop">上へ</button>
+        <button class="submit-button" type="button" id="btnSubmit">アンケート内容を送信</button>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast">コピーしました</div>
+  <div class="toast" id="toast">送信しました</div>
+
+  <!-- LIFF SDK（送信サンプルと同じ） -->
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
 
   <script>
-    const LIFF_ID = "2009003637-C48Yebrk"; // 未設定でもOK
+    // ★あなたのLIFF ID（ユーザーが指定した値）
+    const LIFF_ID = "2009003637-C48Yebrk";
 
     const $ = (q, root=document) => root.querySelector(q);
     const $$ = (q, root=document) => Array.from(root.querySelectorAll(q));
 
     const form = $("#survey");
     const errorBox = $("#errorBox");
-    const resultView = $("#resultView");
-    const summaryBox = $("#summaryBox");
-    const stickyBar = $("#stickyBar");
     const statusText = $("#statusText");
     const toast = $("#toast");
 
     const STORE_KEY = "clinic_survey_onepage_mobile_v1";
 
+    // ---- LIFF init ----
+    document.addEventListener("DOMContentLoaded", async () => {
+      try{
+        if (window.liff && LIFF_ID) {
+          await liff.init({ liffId: LIFF_ID });
+        }
+      }catch(e){
+        // LIFF外で開くケースはここで落ちてもOK（URL共有にフォールバック）
+        console.warn("LIFF init error:", e);
+      }
+    });
+
+    // ---- その他入力 表示制御 ----
     function toggleOther(triggerId, wrapId, selector){
       const t = $("#"+triggerId);
       const w = $("#"+wrapId);
@@ -600,60 +650,28 @@
     toggleOther("q1OtherCheck","q1OtherWrap","textarea");
     toggleOther("q3OtherCheck","q3OtherWrap","textarea");
 
+    // ---- 星：選んだ数まで黄色 ----
+    const starWrap = document.getElementById("npsStars");
+    const starLabels = starWrap ? Array.from(starWrap.querySelectorAll(".star")) : [];
+
+    function paintStars(){
+      if(!starWrap) return;
+      const checked = starWrap.querySelector('input[name="q9"]:checked');
+      const val = checked ? Number(checked.value) : 0;
+      starLabels.forEach((lb, idx) => {
+        const span = lb.querySelector("span");
+        const on = idx < val;
+        lb.classList.toggle("isOn", on);
+        if(span) span.textContent = on ? "★" : "☆";
+      });
+    }
+
     form.addEventListener("change", () => { saveDraft(); updateStatus(); paintStars(); });
     form.addEventListener("input",  () => { saveDraft(); updateStatus(); });
 
     $("#btnTop").onclick = () => window.scrollTo({top:0, behavior:"smooth"});
 
-    $("#btnSubmit").onclick = () => {
-      const errors = validate();
-      if(errors.length){
-        showErrors(errors);
-        const first = $(errors[0].selector);
-        if(first) first.scrollIntoView({behavior:"smooth", block:"center"});
-        return;
-      }
-      hideErrors();
-      showSummary();
-    };
-
-    $("#btnRestart").onclick = () => {
-      form.reset();
-      clearDraft();
-      ["genderOtherWrap","staffOtherWrap","q1OtherWrap","q3OtherWrap"].forEach(id => $("#"+id).style.display="none");
-      resultView.style.display="none";
-      stickyBar.style.display="block";
-      window.scrollTo({top:0, behavior:"smooth"});
-      paintStars();
-      updateStatus();
-    };
-
-    $("#btnCopy").onclick = async () => {
-      const text = buildShareText();
-      try{ await navigator.clipboard.writeText(text); popToast("コピーしました"); }
-      catch{
-        const ta=document.createElement("textarea");
-        ta.value=text; document.body.appendChild(ta);
-        ta.select(); document.execCommand("copy");
-        ta.remove();
-        popToast("コピーしました");
-      }
-    };
-
-    $("#btnShareLine").onclick = async () => {
-      const text = buildShareText();
-      await ensureLiffReady();
-      const url = "https://line.me/R/share?text=" + encodeURIComponent(text);
-      if (window.liff?.openWindow) liff.openWindow({ url, external:true });
-      else window.location.href = url;
-    };
-
-    function popToast(msg){
-      toast.textContent = msg;
-      toast.style.display="block";
-      setTimeout(()=>toast.style.display="none", 1400);
-    }
-
+    // ---- バリデーション ----
     function validate(){
       const errors = [];
 
@@ -683,12 +701,15 @@
       }
 
       ["q4","q5","q6","q7","q8"].forEach(id=>{
-        if(!form[id].value) errors.push({ selector:`[data-sec="${id}"]`, msg:`「${labelFor(id)}」を選択してください。` });
+        if(!form[id].value){
+          errors.push({ selector:`[data-sec="${id}"]`, msg:`「${labelFor(id)}」を選択してください。` });
+        }
       });
 
       if(!form.q9.value){
         errors.push({ selector:'[data-sec="q9"]', msg:'「⑨おすすめ度（1〜10）」を選択してください。' });
       }
+
       return errors;
     }
 
@@ -705,25 +726,27 @@
     }
     function hideErrors(){ errorBox.style.display="none"; errorBox.innerHTML=""; }
 
-    function showSummary(){
-      const data = collect();
-      const rows = Object.entries(data).map(([k,v]) => `
-        <div class="row">
-          <div class="k">${escapeHtml(k)}</div>
-          <div class="v">${escapeHtml(v || "—")}</div>
-        </div>
-      `).join("");
-
-      summaryBox.innerHTML = `<h3>回答内容（確認）</h3>${rows}`;
-      resultView.style.display="block";
-      stickyBar.style.display="none";
-      window.scrollTo({ top: resultView.offsetTop - 10, behavior:"smooth" });
+    function updateStatus(){
+      const errors = validate();
+      if(errors.length===0){
+        statusText.innerHTML = `<b style="color:var(--ok)">必須項目OK</b>：送信できます`;
+        $("#btnSubmit").disabled = false;
+        $("#btnSubmitInline").disabled = false;
+      }else{
+        statusText.textContent = `未入力の必須項目：${errors.length}件`;
+        $("#btnSubmit").disabled = true;
+        $("#btnSubmitInline").disabled = true;
+      }
     }
 
+    // ---- 送信用テキスト作成（サンプル形式に寄せる） ----
     function collect(){
       const gender = form.gender.value
         ? (form.gender.value==="その他" ? `その他：${(form.gender_other.value||"").trim()}` : form.gender.value)
-        : "";
+        : "（未選択）";
+
+      const age = form.age.value || "（未選択）";
+
       const staff = form.staff.value
         ? (form.staff.value==="その他" ? `その他：${(form.staff_other.value||"").trim()}` : form.staff.value)
         : "";
@@ -731,49 +754,117 @@
       const q1 = $$('input[name="q1"]:checked').map(x=>x.value).map(v=>{
         if(v==="その他") return `その他：${(form.q1_other.value||"").trim()}`;
         return v;
-      }).join("、");
+      });
 
-      const q2 = $$('input[name="q2"]:checked').map(x=>x.value).join("、");
+      const q2 = $$('input[name="q2"]:checked').map(x=>x.value);
 
       const q3 = $$('input[name="q3"]:checked').map(x=>x.value).map(v=>{
         if(v==="その他") return `その他：${(form.q3_other.value||"").trim()}`;
         return v;
-      }).join("、");
+      });
 
       return {
-        "性別（任意）": gender,
-        "年代（任意）": form.age.value || "",
-        "担当スタッフ（必須）": staff,
-        "①主なお悩み（必須）": q1,
-        "②目標・目的（必須）": q2,
-        "③魅力を感じた点（必須）": q3,
-        "④院内の雰囲気（必須）": form.q4.value || "",
-        "⑤院内の清潔感（必須）": form.q5.value || "",
-        "⑥スタッフ対応（必須）": form.q6.value || "",
-        "⑦説明の分かりやすさ（必須）": form.q7.value || "",
-        "⑧施術後の変化（必須）": form.q8.value || "",
-        "⑨おすすめ度（必須）": form.q9.value ? `${form.q9.value} / 10` : ""
+        gender,
+        age,
+        staff,
+        q1,
+        q2,
+        q3,
+        q4: form.q4.value || "",
+        q5: form.q5.value || "",
+        q6: form.q6.value || "",
+        q7: form.q7.value || "",
+        q8: form.q8.value || "",
+        q9: form.q9.value || ""
       };
     }
 
-    function buildShareText(){
-      const data=collect();
-      const lines=["【ご来院アンケート】"];
-      for(const [k,v] of Object.entries(data)){
-        lines.push(`${k}\n${v || "—"}`);
-      }
-      return lines.join("\n\n");
+    function buildTextMessage(){
+      const d = collect();
+      return `≪ご来院アンケート≫
+【性別（任意）】
+・${d.gender}
+【年代（任意）】
+・${d.age}
+【担当スタッフ（必須）】
+・${d.staff}
+【①主なお悩み（必須）】
+・${d.q1.length ? d.q1.join(" / ") : "（未選択）"}
+【②目標・目的（必須）】
+・${d.q2.length ? d.q2.join(" / ") : "（未選択）"}
+【③魅力を感じた点（必須）】
+・${d.q3.length ? d.q3.join(" / ") : "（未選択）"}
+【④院内の雰囲気（必須）】
+・${d.q4}
+【⑤院内の清潔感（必須）】
+・${d.q5}
+【⑥スタッフ対応（必須）】
+・${d.q6}
+【⑦説明の分かりやすさ（必須）】
+・${d.q7}
+【⑧施術後の変化（必須）】
+・${d.q8}
+【⑨おすすめ度（必須）】
+・${d.q9} / 10`;
     }
 
-    function updateStatus(){
+    // ---- 送信（LIFF優先→ダメならLINE共有URL） ----
+    async function sendToLine(){
       const errors = validate();
-      if(errors.length===0){
-        statusText.innerHTML = `<b style="color:var(--ok)">必須項目OK</b>：確認できます`;
-      }else{
-        statusText.textContent = `未入力の必須項目：${errors.length}件`;
+      if(errors.length){
+        showErrors(errors);
+        const first = document.querySelector(errors[0].selector);
+        if(first) first.scrollIntoView({behavior:"smooth", block:"center"});
+        return;
+      }
+      hideErrors();
+
+      const textMessage = buildTextMessage();
+
+      try{
+        // LIFFが使える場合
+        if(window.liff && LIFF_ID){
+          // shareTargetPicker が使えれば最優先
+          const canSharePicker = !!(liff.isApiAvailable && liff.isApiAvailable("shareTargetPicker"));
+          if(canSharePicker){
+            await liff.shareTargetPicker([{ type:"text", text: textMessage }]);
+            popToast("送信しました");
+            // closeできる時は閉じる
+            try{ if(liff.closeWindow) liff.closeWindow(); }catch{}
+            return;
+          }
+
+          // トーク画面内なら sendMessages
+          const inClient = !!(liff.isInClient && liff.isInClient());
+          if(inClient && liff.sendMessages){
+            await liff.sendMessages([{ type:"text", text: textMessage }]);
+            alert("アンケート内容を送信しました。ありがとうございます。");
+            try{ liff.closeWindow(); }catch{}
+            return;
+          }
+        }
+
+        // フォールバック：LINE共有URL
+        const url = "https://line.me/R/share?text=" + encodeURIComponent(textMessage);
+        window.location.href = url;
+
+      }catch(err){
+        console.error("send error:", err);
+        const url = "https://line.me/R/share?text=" + encodeURIComponent(textMessage);
+        window.location.href = url;
       }
     }
 
+    $("#btnSubmit").onclick = sendToLine;
+    $("#btnSubmitInline").onclick = sendToLine;
+
+    function popToast(msg){
+      toast.textContent = msg;
+      toast.style.display="block";
+      setTimeout(()=>toast.style.display="none", 1400);
+    }
+
+    // ---- 下書き保存 ----
     function saveDraft(){
       try{
         const fd = new FormData(form);
@@ -813,23 +904,6 @@
         $("#q3OtherWrap").style.display     = $("#q3OtherCheck").checked ? "block" : "none";
       }catch{}
     }
-    function clearDraft(){ try{ localStorage.removeItem(STORE_KEY); }catch{} }
-
-    async function ensureLiffReady(){
-      if(!LIFF_ID) return;
-      if(!window.liff) await loadScript("https://static.line-scdn.net/liff/edge/2/sdk.js");
-      if(window.liff && !liff._initCalled){
-        try{ await liff.init({ liffId: LIFF_ID }); }catch{}
-      }
-    }
-    function loadScript(src){
-      return new Promise((resolve,reject)=>{
-        const s=document.createElement("script");
-        s.src=src; s.async=true;
-        s.onload=resolve; s.onerror=reject;
-        document.head.appendChild(s);
-      });
-    }
 
     function escapeHtml(str){
       return String(str ?? "").replace(/[&<>"']/g, s => ({
@@ -837,21 +911,6 @@
       }[s]));
     }
     function cssEscape(s){ return String(s).replace(/["\\]/g, "\\$&"); }
-
-    // ⭐ 星：選んだ数まで黄色
-    const starWrap = document.getElementById("npsStars");
-    const starLabels = starWrap ? Array.from(starWrap.querySelectorAll(".star")) : [];
-    function paintStars(){
-      if(!starWrap) return;
-      const checked = starWrap.querySelector('input[name="q9"]:checked');
-      const val = checked ? Number(checked.value) : 0;
-      starLabels.forEach((lb, idx) => {
-        const span = lb.querySelector("span");
-        const on = idx < val;
-        lb.classList.toggle("isOn", on);
-        if(span) span.textContent = on ? "★" : "☆";
-      });
-    }
 
     // init
     loadDraft();
