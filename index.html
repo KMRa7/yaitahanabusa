@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ご来院アンケート</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f7f8fb;
+      --panel:#ffffff;
+      --ink:#0b1220;
+      --muted:#5b6477;
+      --line:#e7eaf0;
+
+      --brand:#0f2b5b;
+      --brand-2:#2c6bdc;
+      --ok:#10b981;
+
+      --radius:16px;
+      --shadow:0 10px 28px rgba(11,18,32,.08);
+      --safe:env(safe-area-inset-bottom);
+    }
+
+    *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+    html,body{height:100%}
+
+    /* ✅ スマホでムラになりにくい背景 */
+    body{
+      margin:0;
+      font-family:Inter,'Noto Sans JP',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial,sans-serif;
+      color:var(--ink);
+      background:linear-gradient(180deg, #f6f8ff 0%, #ffffff 60%, #ffffff 100%);
+      background-attachment: fixed;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-20% -20%;
+      pointer-events:none;
+      background:
+        radial-gradient(560px 320px at 12% 6%, rgba(44,107,220,.10), transparent 60%),
+        radial-gradient(560px 320px at 88% 0%, rgba(15,43,91,.08), transparent 58%);
+      z-index:-1;
+    }
+
+    /* ✅ スマホ中心：左右余白は小さめ */
+    .wrap{
+      max-width:620px;
+      margin:0 auto;
+      padding:12px 12px calc(120px + var(--safe));
+    }
+
+    /* ✅ ヘッダー（小さく・邪魔しない） */
+    header{
+      position:sticky; top:0; z-index:10;
+      background:rgba(255,255,255,.94);
+      border-bottom:1px solid rgba(231,234,240,.95);
+      box-shadow:0 8px 18px rgba(11,18,32,.05);
+      backdrop-filter:saturate(140%) blur(8px);
+    }
+    .headbar{
+      max-width:620px;
+      margin:0 auto;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; min-width:0}
+    .headerImg{
+      width:40px; height:40px;
+      border-radius:12px;
+      object-fit:cover;
+      border:1px solid rgba(231,234,240,.95);
+      box-shadow:0 10px 18px rgba(15,43,91,.14);
+      flex:0 0 40px;
+      background:#fff;
+    }
+    .brandTitle{display:flex; flex-direction:column; gap:2px; min-width:0}
+    .brandTitle b{
+      font-weight:900;
+      letter-spacing:.02em;
+      font-size:14px;
+      line-height:1.2;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .brandTitle span{
+      font-size:11px;
+      color:var(--muted);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .pill{
+      font-size:11px; font-weight:900;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brand);
+      white-space:nowrap;
+    }
+
+    /* ✅ ファーストビュー：短く */
+    .hero{
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:linear-gradient(135deg, rgba(15,43,91,.95), rgba(44,107,220,.85));
+      color:#fff;
+      box-shadow:0 14px 30px rgba(11,18,32,.14);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:auto -50px -70px auto;
+      width:220px; height:220px; border-radius:999px;
+      background:rgba(255,255,255,.10);
+      transform:rotate(20deg);
+    }
+    .heroInner{padding:14px 14px}
+    h1{margin:0 0 6px; font-size:20px; letter-spacing:.01em}
+    .lead{margin:0; color:rgba(255,255,255,.86); line-height:1.7; font-size:13px}
+
+    /* ✅ カード */
+    .card{
+      margin-top:12px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+
+    .secTitle{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin:0 0 8px;
+    }
+    .secTitle h2{
+      margin:0;
+      font-size:15px;
+      font-weight:900;
+      line-height:1.35;
+    }
+    .badge{
+      display:inline-flex; align-items:center;
+      font-size:11px; font-weight:900;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      background:#fff;
+      white-space:nowrap;
+      flex:0 0 auto;
+    }
+    .badge.req{
+      border-color:rgba(239,68,68,.22);
+      background:rgba(239,68,68,.08);
+      color:#b91c1c;
+    }
+    .hint{margin:8px 0 0; color:var(--muted); font-size:12.5px; line-height:1.6}
+
+    /* ✅ スマホは常に1列（タップしやすい） */
+    .grid{display:grid; gap:10px; grid-template-columns:1fr}
+
+    /* ✅ 選択肢：大きめ */
+    .choice{
+      display:flex; gap:12px; align-items:flex-start;
+      padding:14px 14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      cursor:pointer;
+      user-select:none;
+      transition:border-color .15s, box-shadow .15s, transform .05s;
+    }
+    .choice:active{transform:translateY(1px)}
+    .choice input{
+      appearance:none; -webkit-appearance:none;
+      width:24px; height:24px; margin:0;
+      border:2px solid #cbd5e1;
+      display:grid; place-items:center;
+      background:#fff;
+      flex:0 0 24px;
+      margin-top:1px;
+    }
+    .choice input[type="checkbox"]{border-radius:8px}
+    .choice input[type="radio"]{border-radius:999px}
+    .choice input::after{
+      content:""; width:13px; height:13px;
+      background:var(--ok);
+      transform:scale(0);
+      transition:transform .15s ease;
+      border-radius:5px;
+    }
+    .choice input[type="radio"]::after{border-radius:999px}
+    .choice input:checked{border-color:var(--ok)}
+    .choice input:checked::after{transform:scale(1)}
+    .choice:has(input:checked){
+      border-color:rgba(16,185,129,.55);
+      box-shadow:0 0 0 4px rgba(16,185,129,.12);
+    }
+    .choice span{line-height:1.55; font-size:14px}
+
+    .otherWrap{margin:8px 0 0 36px}
+    input[type="text"], textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 12px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+    }
+    textarea{min-height:110px; resize:vertical}
+    input[type="text"]:focus, textarea:focus{
+      border-color:rgba(44,107,220,.45);
+      box-shadow:0 0 0 4px rgba(44,107,220,.12);
+    }
+
+    /* ✅ スマホ用：星は折り返してOK */
+    .stars{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      padding-top:8px;
+    }
+    .star{
+      position:relative;
+      display:inline-grid;
+      place-items:center;
+      width:44px; height:44px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      cursor:pointer;
+      user-select:none;
+      transition:box-shadow .15s, border-color .15s, transform .05s, background .15s;
+    }
+    .star:active{transform:translateY(1px)}
+    .star input{position:absolute; opacity:0; pointer-events:none}
+    .star span{
+      font-size:22px;
+      font-weight:900;
+      line-height:1;
+      color:#94a3b8;
+      transition:color .15s, transform .15s;
+    }
+    .star.isOn{
+      border-color:rgba(245,158,11,.55);
+      box-shadow:0 0 0 4px rgba(245,158,11,.16);
+      background:rgba(245,158,11,.06);
+    }
+    .star.isOn span{color:#f59e0b; transform:scale(1.05)}
+
+    /* ✅ 下固定バー：スマホは“確認ボタン”を主役に */
+    .stickyBar{
+      position:fixed; left:0; right:0; bottom:0; z-index:20;
+      background:rgba(255,255,255,.96);
+      border-top:1px solid var(--line);
+      box-shadow:0 -10px 26px rgba(11,18,32,.08);
+      padding:10px 12px calc(10px + var(--safe));
+      backdrop-filter:saturate(140%) blur(8px);
+    }
+    .stickyInner{
+      max-width:620px; margin:0 auto;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .status{font-size:12.5px; color:var(--muted)}
+    .btnRow{display:flex; gap:10px}
+    .btn{
+      min-height:50px;
+      padding:12px 16px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:900;
+      cursor:pointer;
+      flex:1;
+      font-size:14px;
+    }
+    .btn.primary{
+      border-color:transparent;
+      background:linear-gradient(180deg, var(--brand-2), var(--brand));
+      color:#fff;
+      box-shadow:0 14px 20px rgba(15,43,91,.16);
+    }
+    .btn[disabled]{opacity:.55; cursor:not-allowed}
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:96px;
+      transform:translateX(-50%);
+      background:rgba(15,43,91,.92);
+      color:#fff;
+      font-weight:800;
+      font-size:13px;
+      padding:10px 12px;
+      border-radius:999px;
+      display:none;
+      z-index:30;
+      box-shadow:0 14px 26px rgba(11,18,32,.25);
+    }
+
+    .result{display:none; margin-top:12px}
+    .summary{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:#fff;
+    }
+    .summary h3{margin:0 0 8px; font-size:15px}
+    .row{padding:10px 0; border-top:1px dashed #e2e8f0}
+    .row:first-of-type{border-top:none}
+    .k{font-weight:900; font-size:12.5px}
+    .v{margin-top:6px; color:var(--ink); font-size:13.5px; line-height:1.6}
+
+    .actions{display:flex; gap:10px; flex-direction:column; margin-top:12px}
+    .actions .btn{width:100%}
+
+    .err{
+      display:none;
+      margin-top:10px;
+      border:1px solid rgba(239,68,68,.25);
+      background:rgba(239,68,68,.08);
+      color:#b91c1c;
+      border-radius:16px;
+      padding:10px 12px;
+      font-size:13px;
+      font-weight:800;
+      line-height:1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="headbar">
+      <div class="brand">
+        <img class="headerImg"
+          src="https://www.dropbox.com/scl/fi/ekptfiaipfiwserb9z21d/imgi_2_preview.jpg?rlkey=324acn5cxbbcfgg3rp81pbktp&st=acb5acdj&dl=1"
+          alt="ヘッダーロゴ" decoding="async" loading="eager" />
+        <div class="brandTitle">
+          <b>矢板 偀 接骨院</b>
+          <span>ご来院アンケート</span>
+        </div>
+      </div>
+      <span class="pill">1〜2分</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="heroInner">
+        <h1>ご来院アンケート</h1>
+        <p class="lead">
+          サービス向上のため、簡単なアンケートにご協力ください。<br>
+          <b>必須</b>の項目は未回答だと確認できません。
+        </p>
+      </div>
+    </section>
+
+    <form id="survey" novalidate>
+
+      <section class="card" data-sec="gender">
+        <div class="secTitle"><h2>性別を教えてください。</h2><span class="badge">任意</span></div>
+        <div class="grid">
+          <label class="choice"><input type="radio" name="gender" value="男性"><span>男性</span></label>
+          <label class="choice"><input type="radio" name="gender" value="女性"><span>女性</span></label>
+          <label class="choice"><input type="radio" name="gender" value="その他" id="genderOtherRadio"><span>その他</span></label>
+        </div>
+        <div class="otherWrap" id="genderOtherWrap" style="display:none">
+          <input type="text" name="gender_other" placeholder="（自由記述）">
+        </div>
+      </section>
+
+      <section class="card" data-sec="age">
+        <div class="secTitle"><h2>ご年代を教えてください。</h2><span class="badge">任意</span></div>
+        <div class="grid">
+          <label class="choice"><input type="radio" name="age" value="10代"><span>10代</span></label>
+          <label class="choice"><input type="radio" name="age" value="20代"><span>20代</span></label>
+          <label class="choice"><input type="radio" name="age" value="30代"><span>30代</span></label>
+          <label class="choice"><input type="radio" name="age" value="40代"><span>40代</span></label>
+          <label class="choice"><input type="radio" name="age" value="50代"><span>50代</span></label>
+          <label class="choice"><input type="radio" name="age" value="60代"><span>60代</span></label>
+          <label class="choice"><input type="radio" name="age" value="70代"><span>70代</span></label>
+          <label class="choice"><input type="radio" name="age" value="80代以降"><span>80代以降</span></label>
+        </div>
+      </section>
+
+      <section class="card" data-sec="staff" data-required="true">
+        <div class="secTitle"><h2>担当スタッフについて教えてください。</h2><span class="badge req">必須</span></div>
+        <div class="grid">
+          <label class="choice"><input type="radio" name="staff" value="小川　和英（院長）"><span>小川　和英（院長）</span></label>
+          <label class="choice"><input type="radio" name="staff" value="樋田　嘉大"><span>樋田　嘉大</span></label>
+          <label class="choice"><input type="radio" name="staff" value="廣安　紅音"><span>廣安　紅音</span></label>
+          <label class="choice"><input type="radio" name="staff" value="木村　大地"><span>木村　大地</span></label>
+          <label class="choice"><input type="radio" name="staff" value="その他" id="staffOtherRadio"><span>その他</span></label>
+        </div>
+        <div class="otherWrap" id="staffOtherWrap" style="display:none">
+          <input type="text" name="staff_other" placeholder="（自由記述）">
+        </div>
+      </section>
+
+      <section class="card" data-sec="q1" data-required="true">
+        <div class="secTitle"><h2>① ご来院時の主なお悩みを教えてください。</h2><span class="badge req">必須</span></div>
+        <p class="hint">※複数選択可</p>
+        <div class="grid">
+          <label class="choice"><input type="checkbox" name="q1" value="首・肩こり"><span>首・肩こり</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="腰痛"><span>腰痛</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="膝の痛み"><span>膝の痛み</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="足・アキレス腱の痛み"><span>足・アキレス腱の痛み</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="慢性的な痛み・違和感"><span>慢性的な痛み・違和感</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="姿勢・骨盤の歪み"><span>姿勢・骨盤の歪み</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="身体のメンテナンス・予防"><span>身体のメンテナンス・予防</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="パフォーマンスUP"><span>パフォーマンスUP</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="ダイエット"><span>ダイエット</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="めまい、頭痛"><span>めまい、頭痛</span></label>
+          <label class="choice"><input type="checkbox" name="q1" value="その他" id="q1OtherCheck"><span>その他</span></label>
+        </div>
+        <div class="otherWrap" id="q1OtherWrap" style="display:none">
+          <textarea name="q1_other" placeholder="（自由記述）"></textarea>
+        </div>
+      </section>
+
+      <section class="card" data-sec="q2" data-required="true">
+        <div class="secTitle"><h2>② 主な目標や目的を教えてください。</h2><span class="badge req">必須</span></div>
+        <p class="hint">※複数選択可</p>
+        <div class="grid">
+          <label class="choice"><input type="checkbox" name="q2" value="痛みの改善"><span>痛みの改善</span></label>
+          <label class="choice"><input type="checkbox" name="q2" value="根本治療"><span>根本治療</span></label>
+          <label class="choice"><input type="checkbox" name="q2" value="姿勢改善"><span>姿勢改善</span></label>
+          <label class="choice"><input type="checkbox" name="q2" value="ダイエット"><span>ダイエット</span></label>
+          <label class="choice"><input type="checkbox" name="q2" value="パフォーマンスUP"><span>パフォーマンスUP</span></label>
+          <label class="choice"><input type="checkbox" name="q2" value="リハビリ"><span>リハビリ</span></label>
+        </div>
+      </section>
+
+      <section class="card" data-sec="q3" data-required="true">
+        <div class="secTitle"><h2>③ 当院の何に魅力を感じましたか？</h2><span class="badge req">必須</span></div>
+        <p class="hint">※複数選択可</p>
+        <div class="grid">
+          <label class="choice"><input type="checkbox" name="q3" value="立地・通いやすさ"><span>立地・通いやすさ</span></label>
+          <label class="choice"><input type="checkbox" name="q3" value="料金"><span>料金</span></label>
+          <label class="choice"><input type="checkbox" name="q3" value="施術内容"><span>施術内容</span></label>
+          <label class="choice"><input type="checkbox" name="q3" value="設備"><span>設備</span></label>
+          <label class="choice"><input type="checkbox" name="q3" value="雰囲気"><span>雰囲気</span></label>
+          <label class="choice"><input type="checkbox" name="q3" value="施術スタッフの質"><span>施術スタッフの質</span></label>
+          <label class="choice"><input type="checkbox" name="q3" value="スポーツに強そうだった"><span>スポーツに強そうだった</span></label>
+          <label class="choice"><input type="checkbox" name="q3" value="口コミ・評価"><span>口コミ・評価</span></label>
+          <label class="choice"><input type="checkbox" name="q3" value="その他" id="q3OtherCheck"><span>その他</span></label>
+        </div>
+        <div class="otherWrap" id="q3OtherWrap" style="display:none">
+          <textarea name="q3_other" placeholder="（自由記述）"></textarea>
+        </div>
+      </section>
+
+      <section class="card" data-sec="q4" data-required="true">
+        <div class="secTitle"><h2>④ 院内の雰囲気について教えてください。</h2><span class="badge req">必須</span></div>
+        <div class="grid">
+          <label class="choice"><input type="radio" name="q4" value="とても良い"><span>とても良い</span></label>
+          <label class="choice"><input type="radio" name="q4" value="良い"><span>良い</span></label>
+          <label class="choice"><input type="radio" name="q4" value="普通"><span>普通</span></label>
+          <label class="choice"><input type="radio" name="q4" value="あまり良くない"><span>あまり良くない</span></label>
+          <label class="choice"><input type="radio" name="q4" value="良くない"><span>良くない</span></label>
+        </div>
+      </section>
+
+      <section class="card" data-sec="q5" data-required="true">
+        <div class="secTitle"><h2>⑤ 院内の清潔感について教えてください。</h2><span class="badge req">必須</span></div>
+        <div class="grid">
+          <label class="choice"><input type="radio" name="q5" value="とても清潔"><span>とても清潔</span></label>
+          <label class="choice"><input type="radio" name="q5" value="清潔"><span>清潔</span></label>
+          <label class="choice"><input type="radio" name="q5" value="普通"><span>普通</span></label>
+          <label class="choice"><input type="radio" name="q5" value="やや気になる"><span>やや気になる</span></label>
+          <label class="choice"><input type="radio" name="q5" value="気になる"><span>気になる</span></label>
+        </div>
+      </section>
+
+      <section class="card" data-sec="q6" data-required="true">
+        <div class="secTitle"><h2>⑥ 担当スタッフの対応について教えてください。</h2><span class="badge req">必須</span></div>
+        <div class="grid">
+          <label class="choice"><input type="radio" name="q6" value="とても良い"><span>とても良い</span></label>
+          <label class="choice"><input type="radio" name="q6" value="良い"><span>良い</span></label>
+          <label class="choice"><input type="radio" name="q6" value="普通"><span>普通</span></label>
+          <label class="choice"><input type="radio" name="q6" value="あまり良くない"><span>あまり良くない</span></label>
+          <label class="choice"><input type="radio" name="q6" value="良くない"><span>良くない</span></label>
+        </div>
+      </section>
+
+      <section class="card" data-sec="q7" data-required="true">
+        <div class="secTitle"><h2>⑦ 問診時の症状や施術内容の説明について教えてください。</h2><span class="badge req">必須</span></div>
+        <div class="grid">
+          <label class="choice"><input type="radio" name="q7" value="とても分かりやすい"><span>とても分かりやすい</span></label>
+          <label class="choice"><input type="radio" name="q7" value="分かりやすい"><span>分かりやすい</span></label>
+          <label class="choice"><input type="radio" name="q7" value="普通"><span>普通</span></label>
+          <label class="choice"><input type="radio" name="q7" value="分かりにくい"><span>分かりにくい</span></label>
+        </div>
+      </section>
+
+      <section class="card" data-sec="q8" data-required="true">
+        <div class="secTitle"><h2>⑧ 施術後の身体の変化について教えてください。</h2><span class="badge req">必須</span></div>
+        <div class="grid">
+          <label class="choice"><input type="radio" name="q8" value="とても感じた"><span>とても感じた</span></label>
+          <label class="choice"><input type="radio" name="q8" value="少し感じた"><span>少し感じた</span></label>
+          <label class="choice"><input type="radio" name="q8" value="あまり感じなかった"><span>あまり感じなかった</span></label>
+          <label class="choice"><input type="radio" name="q8" value="まだ分からない"><span>まだ分からない</span></label>
+        </div>
+      </section>
+
+      <section class="card" data-sec="q9" data-required="true">
+        <div class="secTitle"><h2>⑨ 当院を友人・家族に勧めたいと思いますか？</h2><span class="badge req">必須</span></div>
+        <p class="hint">☆をタップして選択（1〜10）</p>
+
+        <div class="stars" id="npsStars" aria-label="おすすめ度（1〜10）">
+          <label class="star"><input type="radio" name="q9" value="1"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="2"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="3"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="4"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="5"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="6"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="7"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="8"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="9"><span aria-hidden="true">☆</span></label>
+          <label class="star"><input type="radio" name="q9" value="10"><span aria-hidden="true">☆</span></label>
+        </div>
+      </section>
+
+      <div class="err" id="errorBox" role="alert" aria-live="polite"></div>
+
+      <section class="card result" id="resultView">
+        <div class="summary" id="summaryBox"></div>
+        <p class="hint">※このページ単体では保存送信は行いません。必要に応じてコピー・LINE共有をご利用ください。</p>
+        <div class="actions">
+          <button type="button" class="btn" id="btnRestart">やり直す</button>
+          <button type="button" class="btn" id="btnCopy">回答をコピー</button>
+          <button type="button" class="btn primary" id="btnShareLine">LINEで送る</button>
+        </div>
+      </section>
+
+    </form>
+  </main>
+
+  <div class="stickyBar" id="stickyBar">
+    <div class="stickyInner">
+      <div class="status" id="statusText">必須項目の入力状況を確認しています…</div>
+      <div class="btnRow">
+        <button type="button" class="btn" id="btnTop">上へ</button>
+        <button type="button" class="btn primary" id="btnSubmit">内容を確認</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">コピーしました</div>
+
+  <script>
+    const LIFF_ID = ""; // 未設定でもOK
+
+    const $ = (q, root=document) => root.querySelector(q);
+    const $$ = (q, root=document) => Array.from(root.querySelectorAll(q));
+
+    const form = $("#survey");
+    const errorBox = $("#errorBox");
+    const resultView = $("#resultView");
+    const summaryBox = $("#summaryBox");
+    const stickyBar = $("#stickyBar");
+    const statusText = $("#statusText");
+    const toast = $("#toast");
+
+    const STORE_KEY = "clinic_survey_onepage_mobile_v1";
+
+    function toggleOther(triggerId, wrapId, selector){
+      const t = $("#"+triggerId);
+      const w = $("#"+wrapId);
+      const input = $(selector, w);
+
+      const refresh = () => {
+        const on = t.checked;
+        w.style.display = on ? "block" : "none";
+        if(!on){ input.value=""; saveDraft(); }
+        updateStatus();
+      };
+      t.addEventListener("change", refresh);
+      input.addEventListener("input", saveDraft);
+      refresh();
+    }
+
+    toggleOther("genderOtherRadio","genderOtherWrap","input");
+    toggleOther("staffOtherRadio","staffOtherWrap","input");
+    toggleOther("q1OtherCheck","q1OtherWrap","textarea");
+    toggleOther("q3OtherCheck","q3OtherWrap","textarea");
+
+    form.addEventListener("change", () => { saveDraft(); updateStatus(); paintStars(); });
+    form.addEventListener("input",  () => { saveDraft(); updateStatus(); });
+
+    $("#btnTop").onclick = () => window.scrollTo({top:0, behavior:"smooth"});
+
+    $("#btnSubmit").onclick = () => {
+      const errors = validate();
+      if(errors.length){
+        showErrors(errors);
+        const first = $(errors[0].selector);
+        if(first) first.scrollIntoView({behavior:"smooth", block:"center"});
+        return;
+      }
+      hideErrors();
+      showSummary();
+    };
+
+    $("#btnRestart").onclick = () => {
+      form.reset();
+      clearDraft();
+      ["genderOtherWrap","staffOtherWrap","q1OtherWrap","q3OtherWrap"].forEach(id => $("#"+id).style.display="none");
+      resultView.style.display="none";
+      stickyBar.style.display="block";
+      window.scrollTo({top:0, behavior:"smooth"});
+      paintStars();
+      updateStatus();
+    };
+
+    $("#btnCopy").onclick = async () => {
+      const text = buildShareText();
+      try{ await navigator.clipboard.writeText(text); popToast("コピーしました"); }
+      catch{
+        const ta=document.createElement("textarea");
+        ta.value=text; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy");
+        ta.remove();
+        popToast("コピーしました");
+      }
+    };
+
+    $("#btnShareLine").onclick = async () => {
+      const text = buildShareText();
+      await ensureLiffReady();
+      const url = "https://line.me/R/share?text=" + encodeURIComponent(text);
+      if (window.liff?.openWindow) liff.openWindow({ url, external:true });
+      else window.location.href = url;
+    };
+
+    function popToast(msg){
+      toast.textContent = msg;
+      toast.style.display="block";
+      setTimeout(()=>toast.style.display="none", 1400);
+    }
+
+    function validate(){
+      const errors = [];
+
+      if(!form.staff.value){
+        errors.push({ selector:'[data-sec="staff"]', msg:'「担当スタッフ」を選択してください。' });
+      }else if(form.staff.value==="その他" && !(form.staff_other.value||"").trim()){
+        errors.push({ selector:'[data-sec="staff"]', msg:'「担当スタッフ：その他」の内容を入力してください。' });
+      }
+
+      const q1 = $$('input[name="q1"]:checked').map(x=>x.value);
+      if(q1.length===0){
+        errors.push({ selector:'[data-sec="q1"]', msg:'「①主なお悩み」を1つ以上選択してください。' });
+      }else if(q1.includes("その他") && !(form.q1_other.value||"").trim()){
+        errors.push({ selector:'[data-sec="q1"]', msg:'「①主なお悩み：その他」の内容を入力してください。' });
+      }
+
+      const q2 = $$('input[name="q2"]:checked').map(x=>x.value);
+      if(q2.length===0){
+        errors.push({ selector:'[data-sec="q2"]', msg:'「②目標や目的」を1つ以上選択してください。' });
+      }
+
+      const q3 = $$('input[name="q3"]:checked').map(x=>x.value);
+      if(q3.length===0){
+        errors.push({ selector:'[data-sec="q3"]', msg:'「③魅力を感じた点」を1つ以上選択してください。' });
+      }else if(q3.includes("その他") && !(form.q3_other.value||"").trim()){
+        errors.push({ selector:'[data-sec="q3"]', msg:'「③魅力：その他」の内容を入力してください。' });
+      }
+
+      ["q4","q5","q6","q7","q8"].forEach(id=>{
+        if(!form[id].value) errors.push({ selector:`[data-sec="${id}"]`, msg:`「${labelFor(id)}」を選択してください。` });
+      });
+
+      if(!form.q9.value){
+        errors.push({ selector:'[data-sec="q9"]', msg:'「⑨おすすめ度（1〜10）」を選択してください。' });
+      }
+      return errors;
+    }
+
+    function labelFor(id){
+      const map={ q4:"④院内の雰囲気", q5:"⑤清潔感", q6:"⑥スタッフ対応", q7:"⑦説明の分かりやすさ", q8:"⑧施術後の変化" };
+      return map[id] || id;
+    }
+
+    function showErrors(errors){
+      errorBox.style.display="block";
+      errorBox.innerHTML =
+        "入力に不足があります。以下をご確認ください：<br>" +
+        errors.map(e=>"・"+escapeHtml(e.msg)).join("<br>");
+    }
+    function hideErrors(){ errorBox.style.display="none"; errorBox.innerHTML=""; }
+
+    function showSummary(){
+      const data = collect();
+      const rows = Object.entries(data).map(([k,v]) => `
+        <div class="row">
+          <div class="k">${escapeHtml(k)}</div>
+          <div class="v">${escapeHtml(v || "—")}</div>
+        </div>
+      `).join("");
+
+      summaryBox.innerHTML = `<h3>回答内容（確認）</h3>${rows}`;
+      resultView.style.display="block";
+      stickyBar.style.display="none";
+      window.scrollTo({ top: resultView.offsetTop - 10, behavior:"smooth" });
+    }
+
+    function collect(){
+      const gender = form.gender.value
+        ? (form.gender.value==="その他" ? `その他：${(form.gender_other.value||"").trim()}` : form.gender.value)
+        : "";
+      const staff = form.staff.value
+        ? (form.staff.value==="その他" ? `その他：${(form.staff_other.value||"").trim()}` : form.staff.value)
+        : "";
+
+      const q1 = $$('input[name="q1"]:checked').map(x=>x.value).map(v=>{
+        if(v==="その他") return `その他：${(form.q1_other.value||"").trim()}`;
+        return v;
+      }).join("、");
+
+      const q2 = $$('input[name="q2"]:checked').map(x=>x.value).join("、");
+
+      const q3 = $$('input[name="q3"]:checked').map(x=>x.value).map(v=>{
+        if(v==="その他") return `その他：${(form.q3_other.value||"").trim()}`;
+        return v;
+      }).join("、");
+
+      return {
+        "性別（任意）": gender,
+        "年代（任意）": form.age.value || "",
+        "担当スタッフ（必須）": staff,
+        "①主なお悩み（必須）": q1,
+        "②目標・目的（必須）": q2,
+        "③魅力を感じた点（必須）": q3,
+        "④院内の雰囲気（必須）": form.q4.value || "",
+        "⑤院内の清潔感（必須）": form.q5.value || "",
+        "⑥スタッフ対応（必須）": form.q6.value || "",
+        "⑦説明の分かりやすさ（必須）": form.q7.value || "",
+        "⑧施術後の変化（必須）": form.q8.value || "",
+        "⑨おすすめ度（必須）": form.q9.value ? `${form.q9.value} / 10` : ""
+      };
+    }
+
+    function buildShareText(){
+      const data=collect();
+      const lines=["【ご来院アンケート】"];
+      for(const [k,v] of Object.entries(data)){
+        lines.push(`${k}\n${v || "—"}`);
+      }
+      return lines.join("\n\n");
+    }
+
+    function updateStatus(){
+      const errors = validate();
+      if(errors.length===0){
+        statusText.innerHTML = `<b style="color:var(--ok)">必須項目OK</b>：確認できます`;
+      }else{
+        statusText.textContent = `未入力の必須項目：${errors.length}件`;
+      }
+    }
+
+    function saveDraft(){
+      try{
+        const fd = new FormData(form);
+        const obj = {};
+        for(const [k,v] of fd.entries()){
+          if(obj[k]===undefined) obj[k]=v;
+          else if(Array.isArray(obj[k])) obj[k].push(v);
+          else obj[k]=[obj[k], v];
+        }
+        localStorage.setItem(STORE_KEY, JSON.stringify(obj));
+      }catch{}
+    }
+
+    function loadDraft(){
+      try{
+        const raw = localStorage.getItem(STORE_KEY);
+        if(!raw) return;
+        const obj = JSON.parse(raw);
+
+        for(const [k,v] of Object.entries(obj)){
+          const els = $$(`[name="${cssEscape(k)}"]`, form);
+          if(!els.length) continue;
+
+          if(els[0].type==="radio"){
+            els.forEach(el => el.checked = (el.value === v));
+          }else if(els[0].type==="checkbox"){
+            const arr = Array.isArray(v) ? v : [v];
+            els.forEach(el => el.checked = arr.includes(el.value));
+          }else{
+            els[0].value = v;
+          }
+        }
+
+        $("#genderOtherWrap").style.display = $("#genderOtherRadio").checked ? "block" : "none";
+        $("#staffOtherWrap").style.display  = $("#staffOtherRadio").checked ? "block" : "none";
+        $("#q1OtherWrap").style.display     = $("#q1OtherCheck").checked ? "block" : "none";
+        $("#q3OtherWrap").style.display     = $("#q3OtherCheck").checked ? "block" : "none";
+      }catch{}
+    }
+    function clearDraft(){ try{ localStorage.removeItem(STORE_KEY); }catch{} }
+
+    async function ensureLiffReady(){
+      if(!LIFF_ID) return;
+      if(!window.liff) await loadScript("https://static.line-scdn.net/liff/edge/2/sdk.js");
+      if(window.liff && !liff._initCalled){
+        try{ await liff.init({ liffId: LIFF_ID }); }catch{}
+      }
+    }
+    function loadScript(src){
+      return new Promise((resolve,reject)=>{
+        const s=document.createElement("script");
+        s.src=src; s.async=true;
+        s.onload=resolve; s.onerror=reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "").replace(/[&<>"']/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[s]));
+    }
+    function cssEscape(s){ return String(s).replace(/["\\]/g, "\\$&"); }
+
+    // ⭐ 星：選んだ数まで黄色
+    const starWrap = document.getElementById("npsStars");
+    const starLabels = starWrap ? Array.from(starWrap.querySelectorAll(".star")) : [];
+    function paintStars(){
+      if(!starWrap) return;
+      const checked = starWrap.querySelector('input[name="q9"]:checked');
+      const val = checked ? Number(checked.value) : 0;
+      starLabels.forEach((lb, idx) => {
+        const span = lb.querySelector("span");
+        const on = idx < val;
+        lb.classList.toggle("isOn", on);
+        if(span) span.textContent = on ? "★" : "☆";
+      });
+    }
+
+    // init
+    loadDraft();
+    paintStars();
+    updateStatus();
+  </script>
+</body>
+</html>
