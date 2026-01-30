@@ -220,9 +220,9 @@
     }
 
     .stars{
-      display:flex;
+      display:grid;
+      grid-template-columns:repeat(5, 1fr); /* 5個ずつで改行 */
       gap:8px;
-      flex-wrap:wrap;
       align-items:center;
       padding-top:8px;
     }
