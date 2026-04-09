@@ -368,6 +368,13 @@
 
     <form id="survey" novalidate>
 
+      <section class="card" data-sec="name">
+        <div class="secTitle"><h2>お名前を教えてください。</h2><span class="badge">任意</span></div>
+        <div class="grid">
+          <input type="text" name="patient_name" placeholder="お名前を入力してください">
+        </div>
+      </section>
+      
       <section class="card" data-sec="gender">
         <div class="secTitle"><h2>性別を教えてください。</h2><span class="badge">任意</span></div>
         <div class="grid">
@@ -718,6 +725,8 @@
     function buildTextMessage(){
       const d = collect();
       return `≪ご来院アンケート≫
+【お名前（任意）】
+・${(form.patient_name.value || "").trim() || "（未入力）"}
 【性別（任意）】
 ・${d.gender}
 【年代（任意）】
