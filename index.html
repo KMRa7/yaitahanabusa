@@ -368,8 +368,8 @@
 
     <form id="survey" novalidate>
 
-      <section class="card" data-sec="name">
-        <div class="secTitle"><h2>お名前を教えてください。</h2><span class="badge">任意</span></div>
+      <section class="card" data-sec="name" data-required="true">
+        <div class="secTitle"><h2>お名前を教えてください。</h2><span class="badge">必須</span></div>
         <div class="grid">
           <input type="text" name="patient_name" placeholder="お名前を入力してください">
         </div>
@@ -625,6 +625,10 @@
 
     function validate(){
       const errors = [];
+
+      if(!(form.patient_name.value || "").trim()){
+        errors.push({ selector:'[data-sec="name"]', msg:'「お名前」を入力してください。' });
+      }
 
       if(!form.staff.value){
         errors.push({ selector:'[data-sec="staff"]', msg:'「担当スタッフ」を選択してください。' });
